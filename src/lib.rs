@@ -11,11 +11,11 @@ use pyo3::{exceptions::PyValueError, prelude::*, wrap_pyfunction, types::PyModul
 /// # `password` - the password to be checked, passed in plaintext by default
 /// # `show_pass` - false by default. If true, the text of the password will be shown in the function's output. 
 /// # `hash_passed` - false by default. True if password is already sha1 hash. 
+/// # `print_to_console` - tells function whether to print results. Primarily used to disable printing for python bindings.
 /// 
 /// # Returns
 /// 
 /// The number of times `password` was found in known data breaches. 
-/// TODO: add print in bool 
 pub fn check_password(password: &str, show_pass: bool, hash_passed: bool, print_to_console: bool) -> Result<Option<i32>, &'static str>{
     let p_show: &str;
     if show_pass{
