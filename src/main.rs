@@ -2,7 +2,7 @@ use clap::{Arg, Command, ArgAction};
 use std::process::exit;
 use std::fs::File;
 use std::io::{BufReader, BufRead};
-use hibp_check::check_password;
+use hibp_check::{check_next, check_password};
 
 /// Accepts either a single password (indicated by flag -p) or a list of passwords contained in a .txt document (indicated by flag -l)
 /// If passing a .txt, passwords in the document should be formatted one to a line. 
@@ -12,7 +12,7 @@ fn main() {
     //! and this module does not save passwords passed to it nor does it display them in outputs by defualt, though
     //! if users wish to display passwords in output they may pass -s   
     let matches = Command::new("hibp")
-        .version("0.1.1")
+        .version("0.1.2")
         .author("Nathaniel Adamian")
         .about("Check if passwords have been accessed in a databreach")
         .arg(
@@ -77,7 +77,6 @@ fn main() {
             }
         }
     } else {
-        eprintln!("You must provide either --password (-p) <PASSWORD> or --list (-l) <FILE>");
-        exit(1);
+        check_next();
     }
 }

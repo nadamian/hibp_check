@@ -4,6 +4,8 @@ use std::process::exit;
 use hex;
 use num_format::{Locale, ToFormattedString};
 use pyo3::{exceptions::PyValueError, prelude::*, wrap_pyfunction, types::PyModule};
+use std::io::{self, Write};
+use rpassword::prompt_password;
 
 ///Checks a single passed password against HIBP.
 /// 
@@ -69,6 +71,24 @@ pub fn check_password(password: &str, show_pass: bool, hash_passed: bool, print_
     Ok(Some(0))
 }
 
+pub fn pause_before_exit() {
+    print!("\nPress Enter to exit...");
+    io::stdout().flush().unwrap();
+    let _ = io::stdin().read_line(&mut String::new());
+}
+
+pub fn check_next(){
+    loop {
+    let password = prompt_password("Enter a password to check or type `done`: ").expect("Failed to read password.");
+    let password = password.trim();
+    
+    if password.eq_ignore_ascii_case("done"){
+        break;
+    }
+    _ = check_password(&password, false, false, true);
+    }
+}
+
 #[pyfunction]
 fn py_check_password(password: &str, show_pass: bool, hash_passed: bool) -> PyResult<Option<i32>> {
     check_password(password, show_pass, hash_passed, false)
@@ -106,6 +126,7 @@ mod tests{
     }
     #[test]
     fn test_rare_pass(){
+        //if this test fails first check that `neverbeenpwned` has not since been listed in an hibp leak
         let tp3 = "neverbeenpwned";
 
         let hashed = false;

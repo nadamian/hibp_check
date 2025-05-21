@@ -10,6 +10,10 @@ hex = "0.4"
 clap = { version = "4.5", features = ["derive"] }
 num-format = "0.4.4"
 pyo3 = {version = "0.24.2", features = ["extension-module"]}
+rpassword = "7.4.0"
+
+[build-dependencies]
+winres = "0.1.12"
 
 [lib]
 name = "hibp_check"
